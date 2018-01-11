@@ -166,7 +166,7 @@ footer {
 						<c:forEach var="tmp" items="${list }">
 							<tr>
 								<td>${tmp.num }</td>
-								<td><a href="noticeDetail.do?num=${tmp.num }">${tmp.title }</a></td>
+								<td><a href="${pageContext.request.contextPath}/notice/noticeDetail.do?num=${tmp.num }">${tmp.title }</a></td>
 								<td>${tmp.writer }</td>
 								<td>${tmp.regdate }</td>
 								<td>${tmp.viewCount }</td>
@@ -179,7 +179,7 @@ footer {
 		<c:choose>
 			<c:when test="${startPageNum ne 1 }">
 				<li>
-					<a href="list.do?pageNum=${startPageNum-1 }">&laquo;</a>
+					<a href="${pageContext.request.contextPath}/notice/private/adminNoticeList.do?pageNum=${startPageNum-1 }">&laquo;</a>
 				</li>
 			</c:when>
 			<c:otherwise>
@@ -192,17 +192,17 @@ footer {
 				end="${endPageNum }">	
 			<c:choose>
 				<c:when test="${i eq pageNum }">
-					<li class="active"><a href="list.do?pageNum=${i }&condition=${condition}&keyword=${keyword}">${i }</a></li>
+					<li class="active"><a href="${pageContext.request.contextPath}/notice/private/adminNoticeList.do?pageNum=${i }&condition=${condition}&keyword=${keyword}">${i }</a></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="private/adminNoticeList.do?pageNum=${i }">${i }</a></li>
+					<li><a href="${pageContext.request.contextPath}/notice/private/adminNoticeList.do?pageNum=${i }">${i }</a></li>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
 		<c:choose>
 			<c:when test="${endPageNum lt totalPageCount }">
 				<li>
-					<a href="list.do?pageNum=${endPageNum+1 }">&raquo;</a>
+					<a href="${pageContext.request.contextPath}/notice/private/adminNoticeList.do?pageNum=${endPageNum+1 }">&raquo;</a>
 				</li>
 			</c:when>
 			<c:otherwise>
@@ -213,7 +213,7 @@ footer {
 		</c:choose>
 	</ul>
 	<!-- 검색어 관련 form -->
-	<form action="list.do" method="post">
+	<form action="${pageContext.request.contextPath}/notice/private/adminNoticeList.do" method="post">
 		<label for="condition">검색조건</label>
 		<select name="condition" id="condition">
 			<option value="titlecontent" <c:if test="${condition eq 'titlecontent' }">selected</c:if> >제목+내용</option>
@@ -225,7 +225,7 @@ footer {
 	</form>
 				<!-- 글쓰기 버튼 -->
 				<div>
-					<a href="private/adminNoticeInsertForm.do">글쓰기</a>
+					<a href="${pageContext.request.contextPath}/notice/private/adminNoticeInsertForm.do">글쓰기</a>
 				</div>
 			</div>
 		</div>
