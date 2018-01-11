@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="freecafe">
+	<!-- 자주 사용하는 sql 문을 미리 정의 해 놓기 -->
+	<sql id="cafeColumns">
+		num,writer,title,content,likecount,
+		TO_CHAR(regdate, 'YY.MM.DD HH24:MI') AS regdate
+	</sql>
+
+	<select id="getList" resultType="free.cafe.dto.FreeCafeDto"
+		parameterType="free.cafe.dto.FreeCafeDto">
+		SELECT *
+		FROM (SELECT result1.*,ROWNUM rnum
+			  FROM (SELECT <include refid="cafeColumns"/>
+			  		FROM free_board 
+			  		<where>
+						<if test="writer != null">
+							OR writer LIKE '%'||#{writer}||'%'
+						</if>
+						<if test="title != null">
+							OR title LIKE '%'||#{title}||'%'
+						</if>
+						<if test="content != null">
+							OR content LIKE '%'||#{content}||'%'
+						</if>
+					</where>	
+			  		ORDER BY num DESC) result1
+			  )
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
+	</select>
+	
+	<insert id="insert" parameterType="free.cafe.dto.FreeCafeDto">
+		INSERT INTO free_board
+		(num, writer, title, content, likecount, regdate)
+		VALUES(free_cafe_seq.NEXTVAL, 
+		#{writer}, #{title}, #{content}, #{likeCount}, SYSDATE)
+	</insert>
+	
+	<update id="increaseLikeCount" parameterType="int">
+		UPDATE free_board
+		SET likeCount=likeCount+1
+		WHERE num=#{num}
+	</update>
+	
+	<select id="getData" parameterType="free.cafe.dto.FreeCafeDto"
+	 	resultType="free.cafe.dto.FreeCafeDto">
+	 	SELECT result1.*
+	 	FROM
+		 	( SELECT <include refid="cafeColumns"/>,
+		 	LEAD(num, 1, 0) OVER(ORDER BY num DESC) nextNum,
+		 	LAG(num, 1, 0) OVER(ORDER BY num DESC) prevNum
+		 	FROM free_board
+		 	<where>
+				<if test="writer != null">
+					OR writer LIKE '%'||#{writer}||'%'
+				</if>
+				<if test="title != null">
+					OR title LIKE '%'||#{title}||'%'
+				</if>
+				<if test="content != null">
+					OR content LIKE '%'||#{content}||'%'
+				</if>
+			</where>
+		 	ORDER BY num DESC ) result1
+	 	WHERE num=#{num}
+	 </select>
+	 
+	 <delete id="delete" parameterType="int">
+	 	DELETE FROM free_board
+	 	WHERE num=#{num}
+	 </delete>
+	 
+	 <update id="update" parameterType="free.cafe.dto.FreeCafeDto">
+	 	UPDATE free_board
+	 	SET title=#{title},content=#{content}
+	 	WHERE num=#{num}
+	 </update>
+	 
+	 <select id="getCount" resultType="int" 
+	 		parameterType="free.cafe.dto.FreeCafeDto">
+		SELECT NVL(MAX(ROWNUM), 0) 
+		FROM free_board
+		<where>
+			<if test="writer != null">
+				OR writer LIKE '%'||#{writer}||'%'
+			</if>
+			<if test="title != null">
+				OR title LIKE '%'||#{title}||'%'
+			</if>
+			<if test="content != null">
+				OR content LIKE '%'||#{content}||'%'
+			</if>
+		</where>	
+	 </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,18 @@
 package test.controller;
 
+<<<<<<< HEAD
 import test.action.HomeAction;
+=======
+import free.cafe.action.FreeCafeCommentInsertAction;
+import free.cafe.action.FreeCafeDeleteAction;
+import free.cafe.action.FreeCafeDetailAction;
+import free.cafe.action.FreeCafeInsertAction;
+import free.cafe.action.FreeCafeInsertFormAction;
+import free.cafe.action.FreeCafeListAction;
+import free.cafe.action.FreeCafeUpdateAction;
+import free.cafe.action.FreeCafeUpdateFormAction;
+import main.home.action.MainHomeAction;
+>>>>>>> PDW
 import test.notice.action.NoticeCommentInsertAction;
 import test.notice.action.NoticeDeleteAction;
 import test.notice.action.NoticeDetailAction;
@@ -32,8 +44,13 @@ public class UserActionFactory {
 	// 요청처리를 할 Action 객체를 리턴해주는 메소드
 	public Action action(String command) {
 		Action action=null;
+<<<<<<< HEAD
 		if(command.equals("/home")) {
 			action=new HomeAction();
+=======
+		if(command.equals("/free")) {
+			action=new MainHomeAction();
+>>>>>>> PDW
 		}else if(command.equals("/users/signup_form")) {
 			action=new SignupFormAction();
 		}else if(command.equals("/users/signup")) {
@@ -70,6 +87,25 @@ public class UserActionFactory {
 			action = new NoticeUpdateAction();
 		}else if(command.equals("/notice/comment_insert")) {
 			action = new NoticeCommentInsertAction();
+<<<<<<< HEAD
+=======
+		}else if(command.equals("/freecafe/freelist")) {
+			action=new FreeCafeListAction();
+		}else if(command.equals("/freecafe/private/insert")) {
+			action=new FreeCafeInsertAction();
+		}else if(command.equals("/freecafe/private/insertform")) {
+			action=new FreeCafeInsertFormAction();
+		}else if(command.equals("/freecafe/private/updateform")) {
+			action=new FreeCafeUpdateFormAction();
+		}else if(command.equals("/freecafe/update")) {
+			action=new FreeCafeUpdateAction();
+		}else if(command.equals("/freecafe/delete")) {
+			action=new FreeCafeDeleteAction();
+		}else if(command.equals("/freecafe/detail")) {
+			action=new FreeCafeDetailAction();
+		}else if(command.equals("/freecafe/comment_insert")) {
+			action=new FreeCafeCommentInsertAction();
+>>>>>>> PDW
 		}
 		return action;
 	}
