@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice">
+	<sql id="noticeColumns">
+		num,writer,title,content,viewCount,
+		TO_CHAR(regdate,
+		'YY.MM.DD HH24:MI') AS regdate
+	</sql>
+
+	<update id="ViewCount" parameterType="int">
+		UPDATE board_notice
+		SET
+		viewCount=viewCount+1
+		WHERE num=#{num}
+	</update>
+
+	<select id="getList" resultType="noticeDto" parameterType="noticeDto">
+		SELECT *
+		FROM (SELECT result1.*,ROWNUM rnum
+		FROM (SELECT
+		<include refid="noticeColumns" />
+		FROM board_notice
+		<where>
+			<if test="writer != null">
+				OR writer LIKE '%'||#{writer}||'%'
+			</if>
+			<if test="title != null">
+				OR title LIKE '%'||#{title}||'%'
+			</if>
+			<if test="content != null">
+				OR content LIKE '%'||#{content}||'%'
+			</if>
+		</where>
+		ORDER BY num DESC) result1
+		)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
+	</select>
+
+	<insert id="insert" parameterType="noticeDto">
+		INSERT INTO board_notice
+		(num,
+		writer, title, content, viewCount, regdate)
+		VALUES(board_notice_seq.NEXTVAL,
+		#{writer}, #{title}, #{content},
+		#{viewCount}, SYSDATE)
+	</insert>
+
+	<select id="getData" parameterType="noticeDto" resultType="noticeDto">
+		SELECT * from board_notice WHERE num=#{num}
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from board_notice
+		where
+		num=#{num}
+	</delete>
+
+	<update id="update" parameterType="noticeDto">
+		update board_notice
+		set
+		title=#{title}, content=#{content}
+		where num=#{num}
+	</update>
+
+	<select id="getCount" resultType="int" parameterType="noticeDto">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM board_notice
+		<where>
+			<if test="writer != null">
+				OR writer LIKE '%'||#{writer}||'%'
+			</if>
+			<if test="title != null">
+				OR title LIKE '%'||#{title}||'%'
+			</if>
+			<if test="content != null">
+				OR content LIKE '%'||#{content}||'%'
+			</if>
+		</where>
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
